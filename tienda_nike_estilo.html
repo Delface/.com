@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MiTienda – Moda Deportiva</title>
+  <style>
+    /* Reset y base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #fff;
+      color: #111;
+      line-height: 1.5;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Header */
+    header {
+      background-color: #000;
+      color: #fff;
+      padding: 20px 10%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 30px;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #888;
+    }
+
+    /* Hero / Banner */
+    .hero {
+      width: 100%;
+      height: 60vh;
+      background: url('https://via.placeholder.com/1600x600') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+    }
+    .hero button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .hero button:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* Catálogo de productos */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 40px auto;
+    }
+    .productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+    .producto {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .producto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .producto img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .producto-info {
+      padding: 20px;
+    }
+    .producto-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    .producto-info .precio {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e53935;
+    }
+    .producto-info button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .producto-info button:hover {
+      background-color: #333;
+    }
+
+    /* Carrito / Overlay modal */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .overlay.active {
+      display: flex;
+    }
+    .modal-carrito {
+      background: #fff;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+    }
+    .modal-carrito h2 {
+      margin-bottom: 20px;
+    }
+    .modal-carrito .item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .modal-carrito .item span {
+      display: block;
+    }
+    .modal-carrito .total {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: right;
+    }
+    .modal-carrito .btn-cerrar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .modal-carrito button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #e53935;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .modal-carrito button:hover {
+      background-color: #b71c1c;
+    }
+
+    /* Footer con métodos de pago */
+    footer {
+      background-color: #222;
+      color: #ddd;
+      padding: 30px 10%;
+      margin-top: 60px;
+    }
+    footer .footer-info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    footer .footer-info div {
+      flex: 1;
+      margin: 10px;
+    }
+    footer .metodos-pago {
+      margin-top: 20px;
+      text-align: center;
+    }
+    footer .metodos-pago img {
+      height: 35px;
+      margin: 0 10px;
+      vertical-align: middle;
+    }
+    footer p, footer a {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    footer a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">MiTienda</div>
+    <nav>
+      <a href="#productos">Productos</a>
+      <a href="#sobre-nosotros">Sobre Nosotros</a>
+      <a href="#contacto">Contacto</a>
+      <a href="#" id="btn-ver-carrito">Carrito (<span id="carrito-cantidad">0</span>)</a>
+    </nav>
+  </header>
+
+  <!-- Hero / Banner principal -->
+  <section class="hero">
+    <div>
+      <h1>Equipo tu estilo</h1>
+      <button onclick="location.href='#productos'">Ver productos</button>
+    </div>
+  </section>
+
+  <!-- Productos -->
+  <section id="productos" class="container">
+    <h2>Lo más reciente</h2>
+    <div class="productos">
+      <!-- Producto plantilla -->
+      <div class="producto" data-id="101" data-precio="59.99">
+        <img src="https://via.placeholder.com/400x300" alt="Sudadera Deportiva">
+        <div class="producto-info">
+          <h3>Sudadera Deportiva</h3>
+          <p class="precio">$59.99</p>
+          <button class="btn-agregar">Agregar al carrito</button>
+        </div>
+      </div>
+
+      <div class="producto" data-id="102" data-precio="89.99">
+        <img src="https://via.placeholder.com/400x300" alt="Zapatillas Running">
+        <div class="producto-info">
+          <h3>Zapatillas Running</h3>
+          <p class="precio">$89.99</p>
+          <button class="btn-agregar">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Carrito -->
+  <div class="overlay" id="overlay">
+    <div class="modal-carrito">
+      <button class="btn-cerrar" id="cerrar-carrito">&times;</button>
+      <h2>Tu Carrito</h2>
+      <div id="items-carrito">
+        <!-- Items serán añadidos aquí -->
+      </div>
+      <div class="total">Total: $<span id="total-carrito">0.00</span></div>
+      <button id="btn-procesar-pago">Proceder al pago</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-info">
+      <div>
+        <h4>MiTienda</h4>
+        <p>Moda deportiva premium al alcance de todos.</p>
+      </div>
+      <div>
+        <h4>Enlaces útiles</h4>
+        <p><a href="#productos">Productos</a></p>
+        <p><a href="#sobre-nosotros">Sobre Nosotros</a></p>
+        <p><a href="#contacto">Contacto</a></p>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <p>Email: contacto@mitienda.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+    </div>
+    <div class="metodos-pago">
+      <p>Métodos de pago aceptados:</p>
+      <img src="https://via.placeholder.com/60x35?text=Visa" alt="Visa">
+      <img src="https://via.placeholder.com/60x35?text=Mastercard" alt="Mastercard">
+      <img src="https://via.placeholder.com/60x35?text=PayPal" alt="PayPal">
+      <img src="https://via.placeholder.com/60x35?text=Stripe" alt="Stripe">
+    </div>
+    <p>© 2025 MiTienda. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Variables del carrito
+    let carrito = [];
+    const btnsAgregar = document.querySelectorAll('.btn-agregar');
+    const overlay = document.getElementById('overlay');
+    const itemsCarritoEl = document.getElementById('items-carrito');
+    const totalCarritoEl = document.getElementById('total-carrito');
+    const carritoCantidadEl = document.getElementById('carrito-cantidad');
+    const btnVerCarrito = document.getElementById('btn-ver-carrito');
+    const btnCerrarCarrito = document.getElementById('cerrar-carrito');
+    const btnProcesarPago = document.getElementById('btn-procesar-pago');
+
+    function actualizarInterfazCarrito() {
+      // actualizar items
+      itemsCarritoEl.innerHTML = '';
+      let total = 0;
+      let cantidad = 0;
+      carrito.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('item');
+        div.innerHTML = `
+          <span>${item.nombre} x${item.cantidad}</span>
+          <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
+        `;
+        itemsCarritoEl.appendChild(div);
+        total += item.precio * item.cantidad;
+        cantidad += item.cantidad;
+      });
+      totalCarritoEl.textContent = total.toFixed(2);
+      carritoCantidadEl.textContent = cantidad;
+    }
+
+    // Añadir al carrito
+    btnsAgregar.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productoEl = btn.closest('.producto');
+        const id = productoEl.getAttribute('data-id');
+        const nombre = productoEl.querySelector('h3').textContent;
+        const precio = parseFloat(productoEl.getAttribute('data-precio'));
+
+        const existente = carrito.find(p => p.id === id);
+        if (existente) {
+          existente.cantidad += 1;
+        } else {
+          carrito.push({ id, nombre, precio, cantidad: 1 });
+        }
+        actualizarInterfazCarrito();
+      });
+    });
+
+    // Mostrar el carrito (modal)
+    btnVerCarrito.addEventListener('click', (e) => {
+      e.preventDefault();
+      overlay.classList.add('active');
+    });
+    btnCerrarCarrito.addEventListener('click', () => {
+      overlay.classList.remove('active');
+    });
+
+    // Proceder al pago (simulado)
+    btnProcesarPago.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert('Tu carrito está vacío.');
+        return;
+      }
+      alert(`Procesando pago por $${totalCarritoEl.textContent}`);
+      carrito = [];
+      actualizarInterfazCarrito();
+      overlay.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
